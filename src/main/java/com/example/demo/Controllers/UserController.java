@@ -1,5 +1,7 @@
-package com.example.demo;
+package com.example.demo.Controllers;
 
+import com.example.demo.PollManager;
+import com.example.demo.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -8,9 +10,9 @@ import java.util.Collection;
 @RequestMapping("/users")
 public class UserController {
 
-    final PollManager manager = new PollManager();
+    final PollManager manager;
 
-    public UserController() {}
+    public UserController(PollManager manager) {this.manager = manager;}
 
     @GetMapping
     public Collection<User> allUsers() {

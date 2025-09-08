@@ -12,43 +12,54 @@ public class PollManager {
 
     Map<Integer, Poll> polls = new HashMap<>();
     Map<Integer, User> users = new HashMap<>();
-    Map<String, Vote> votes = new HashMap<>();
+    Map<Integer, Vote> votes = new HashMap<>();
     int nextPollId = 1;
     int nextUserId = 1;
+    int nextVoteId = 1;
 
-    public PollManager (){System.out.println("Poll manager created");}
+    public PollManager (){}
 
+    // Add
     public void addPoll(Poll poll) {
+        poll.setId(nextPollId);
         polls.put(nextPollId++, poll);
-        System.out.println("Poll added");
+        poll.setOwner(users.get(poll.getOwner().getId()));
     }
+    public void addUser(User user) {
+        user.setId(nextUserId);
+        users.put(nextUserId++, user);
+    }
+    public void addVote(Vote vote) {
+        vote.setId(nextVoteId);
+        votes.put(nextVoteId++, vote);
+    }
+
+    // Get
     public Poll getPoll(int id) {
         return polls.get(id);
     }
+    public User getUser(int id) { return users.get(id); }
+    public Vote getVote(int id) { return votes.get(id); }
+
+    // Get all
     public Collection<Poll> getPolls() {return polls.values();}
-    public void removePoll (Poll pollToDelete) {
-        System.out.println("Poll: " + pollToDelete.getQuestion() + " removed");
-        votes.values().removeIf(vote -> vote.getPoll().equals(pollToDelete));
-        polls.values().removeIf(poll -> poll.equals(pollToDelete));
-    }
-    public int getPollCount() {
-        return polls.size();
+    public Collection<User> getUsers() {return users.values();}
+    public Collection<Vote> getVotes() {return votes.values();}
+
+    // Remove
+    public void removePoll (int pollId) {
+        Poll pollToDelete = polls.get(pollId);
+        if(pollToDelete != null){
+            votes.values().removeIf(vote -> vote.getPoll().getId() == pollId);
+            polls.remove(pollId);
+        }
     }
 
-    public void addUser(User user) {
-        users.put(nextUserId++, user);
-        System.out.println("User added");
-    }
-    public User getUser(int id) {
-        return users.get(id);
-    }
-    public Collection<User> getUsers() {return users.values();}
+    // Size
+    public int getPollCount() { return polls.size(); }
     public int getUserCount() {
         return users.size();
     }
+    public int getVoteCount() {return votes.size();}
 
-    public void addVote(Vote vote) {
-        votes.put(vote.getVoter().username + "_" + vote.getPoll().question, vote);
-    }
-    public Collection<Vote> getVotes() {return votes.values();}
 }
