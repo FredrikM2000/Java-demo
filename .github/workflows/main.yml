@@ -14,3 +14,9 @@ jobs:
       run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew build
+    - name: Start Spring Boot app
+      run: ./gradlew bootRun &
+    - name: Wait for Spring Boot
+      run: sleep 15
+    - name: Run tests
+      run: ./gradlew test
