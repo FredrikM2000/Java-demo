@@ -13,9 +13,9 @@ public class PollManager {
     Map<Integer, Poll> polls = new HashMap<>();
     Map<Integer, User> users = new HashMap<>();
     Map<Integer, Vote> votes = new HashMap<>();
-    int nextPollId = 1;
-    int nextUserId = 1;
-    int nextVoteId = 1;
+    int nextPollId = 0;
+    int nextUserId = 0;
+    int nextVoteId = 0;
 
     public PollManager (){}
 

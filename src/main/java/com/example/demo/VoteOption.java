@@ -4,6 +4,7 @@ public class VoteOption {
 
     String caption;
     int presentationOrder;
+    int votes;
 
     public VoteOption() { }
 
@@ -14,6 +15,7 @@ public class VoteOption {
     public int getPresentationOrder(){
         return presentationOrder;
     }
+    public int getVotes(){return votes;}
 
     //Setters
     public void setCaption(String caption) {
@@ -23,4 +25,5 @@ public class VoteOption {
     {
         this.presentationOrder = presentationOrder;
     }
+    public void setVotes(int votes) {this.votes = votes;}
 }

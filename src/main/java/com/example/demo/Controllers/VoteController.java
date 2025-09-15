@@ -8,6 +8,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.Instant;
 import java.util.Collection;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/votes")
 public class VoteController {
@@ -24,16 +25,24 @@ public class VoteController {
     @PostMapping
     public Vote createVote(@RequestBody Vote vote) {
         Poll poll = manager.getPoll(vote.getPoll().getId());
-        User voter = manager.getUser(vote.getVoter().getId());
+
+        User voter = null;
+        if (vote.getVoter() != null) {
+            voter = manager.getUser(vote.getVoter().getId());
+        }
+        vote.setVoter(voter);
 
         VoteOption chosenOption = poll.getOptions().stream()
-                .filter(opt -> opt.getCaption().equals(vote.getOption().getCaption()))
+                .filter(opt -> opt.getPresentationOrder() == vote.getOption().getPresentationOrder())
                 .findFirst()
-                .orElse(null);
+                .orElseThrow(() -> new RuntimeException("Option not found"));
 
         vote.setPoll(poll);
         vote.setVoter(voter);
         vote.setOption(chosenOption);
+
+        assert chosenOption != null;
+        chosenOption.setVotes(chosenOption.getVotes() + 1);
 
         manager.addVote(vote);
         return vote;
