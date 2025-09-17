@@ -6,6 +6,20 @@ public class User {
     String email;
 
     public User (){}
+    public User (String username, String email)
+    {
+        this.username = username;
+        this.email = email;
+
+    }
+
+    public Poll createPoll(String question)
+    {
+        Poll poll = new Poll();
+        poll.setQuestion(question);
+        return poll;
+    }
+
 
     // Getters
     public int getId() {return id;}

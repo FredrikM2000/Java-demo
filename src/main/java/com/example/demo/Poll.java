@@ -17,7 +17,14 @@ public class Poll {
         publishedAt = Instant.now();
     }
 
-    public void addOption(VoteOption option) {options.add(option);}
+    public void addVoteOption(VoteOption option) {options.add(option);}
+    public VoteOption addVoteOption(String option) {
+        VoteOption voteOption = new VoteOption();
+        voteOption.setCaption(option);
+        options.add(voteOption);
+
+        return voteOption;
+    }
     public List<VoteOption> getOptions() {return options;}
 
     //Getters
