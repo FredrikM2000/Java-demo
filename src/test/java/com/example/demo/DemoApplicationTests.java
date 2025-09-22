@@ -53,7 +53,7 @@ class DemoApplicationTests {
         // Create poll
         Poll poll = new Poll();
         poll.setQuestion("Do you like coffee?");
-        poll.setOwner(createdUser1);
+        poll.setCreatedBy(createdUser1);
 
         // Add options to poll
         VoteOption yesOption = new VoteOption();
@@ -82,32 +82,32 @@ class DemoApplicationTests {
         Vote vote = new Vote();
         vote.setPoll(createdPoll);
         vote.setVoter(createdUser2);
-        vote.setOption(yesOption);
+        vote.setVotesOn(yesOption);
 
         Vote createdVote = restClient.post().uri(baseUrl + "/votes").body(vote).retrieve().body(Vote.class);
 
         assert createdVote != null;
-        assertEquals("Yes", createdVote.getOption().getCaption());
-        System.out.println("User " + vote.getVoter().getUsername() + " voted " + createdVote.getOption().getCaption() + " on poll " + createdPoll.getQuestion());
+        assertEquals("Yes", createdVote.getVotesOn().getCaption());
+        System.out.println("User " + vote.getVoter().getUsername() + " voted " + createdVote.getVotesOn().getCaption() + " on poll " + createdPoll.getQuestion());
 
         // Change vote
         Vote updateVote = new Vote();
-        updateVote.setOption(noOption); // e.g. option "No"
+        updateVote.setVotesOn(noOption); // e.g. option "No"
 
         Vote updatedVote = restClient.put().uri(baseUrl + "/votes/" + createdVote.getId()).body(updateVote).retrieve().body(Vote.class);
 
         assert updatedVote != null;
-        assertEquals("No", updatedVote.getOption().getCaption());
-        System.out.println("User " + vote.getVoter().getUsername() + " changed their vote to " + updatedVote.getOption().getCaption() + " on poll " + createdPoll.getQuestion());
+        assertEquals("No", updatedVote.getVotesOn().getCaption());
+        System.out.println("User " + vote.getVoter().getUsername() + " changed their vote to " + updatedVote.getVotesOn().getCaption() + " on poll " + createdPoll.getQuestion());
 
         // List votes
         Vote[] votes = restClient.get().uri(baseUrl + "/votes").retrieve().body(Vote[].class);
         assert votes != null;
         assertEquals(1, votes.length);
-        assertEquals("No", votes[0].getOption().getCaption());
+        assertEquals("No", votes[0].getVotesOn().getCaption());
         System.out.println("Votes:");
         for (Vote v : votes) {
-            System.out.println(" - " + v.getVoter().getUsername() + " voted " + v.getOption().getCaption() + " on " + v.getPoll().getQuestion());
+            System.out.println(" - " + v.getVoter().getUsername() + " voted " + v.getVotesOn().getCaption() + " on " + v.getPoll().getQuestion());
         }
 
         // Delete poll

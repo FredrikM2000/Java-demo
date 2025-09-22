@@ -33,16 +33,16 @@ public class VoteController {
         vote.setVoter(voter);
 
         VoteOption chosenOption = poll.getOptions().stream()
-                .filter(opt -> opt.getPresentationOrder() == vote.getOption().getPresentationOrder())
+                .filter(opt -> opt.getPresentationOrder() == vote.getVotesOn().getPresentationOrder())
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Option not found"));
 
         vote.setPoll(poll);
         vote.setVoter(voter);
-        vote.setOption(chosenOption);
+        vote.setVotesOn(chosenOption);
 
         assert chosenOption != null;
-        chosenOption.setVotes(chosenOption.getVotes() + 1);
+        chosenOption.setVotesCount(chosenOption.getVotesCount() + 1);
 
         manager.addVote(vote);
         return vote;
@@ -58,11 +58,11 @@ public class VoteController {
         // Update option
         Poll realPoll = manager.getPoll(existingVote.getPoll().getId());
         VoteOption chosenOption = realPoll.getOptions().stream()
-                .filter(opt -> opt.getCaption().equals(voteUpdate.getOption().getCaption()))
+                .filter(opt -> opt.getCaption().equals(voteUpdate.getVotesOn().getCaption()))
                 .findFirst()
                 .orElse(null);
 
-        existingVote.setOption(chosenOption);
+        existingVote.setVotesOn(chosenOption);
         existingVote.setPublishedAt(Instant.now());
 
         return existingVote;

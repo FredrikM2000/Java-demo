@@ -1,12 +1,28 @@
 package com.example.demo;
 
+import jakarta.persistence.*;
+
 import java.time.Instant;
 
+@Entity
+@Table(name = "votes")
 public class Vote {
-    int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "poll_id")
     Poll poll;
+
+    @ManyToOne
+    @JoinColumn(name = "voter_id")
     User voter;
-    VoteOption option;
+
+    @ManyToOne
+    @JoinColumn(name = "option_id", nullable = false)
+    VoteOption votesOn;
+
     Instant publishedAt;
 
     //Constructor
@@ -15,16 +31,16 @@ public class Vote {
     }
 
     //Getters
-    public int getId() {return id;}
+    public Long getId() {return id;}
     public Poll getPoll() {return poll;}
     public User getVoter() {return voter;}
-    public VoteOption getOption() {return option;}
+    public VoteOption getVotesOn() {return votesOn;}
     public Instant getPublishedAt() {return publishedAt;}
 
     //Setters
-    public void setId(int id) {this.id = id;}
+    public void setId(Long id) {this.id = id;}
     public void setPoll(Poll poll) {this.poll = poll;}
     public void setVoter(User voter) {this.voter = voter;}
-    public void setOption(VoteOption option) {this.option = option;}
+    public void setVotesOn(VoteOption votesOn) {this.votesOn = votesOn;}
     public void setPublishedAt(Instant publishedAt) {this.publishedAt = publishedAt;}
 }

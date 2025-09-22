@@ -4,18 +4,16 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.stereotype.Component;
-import com.example.demo.User;
-import com.example.demo.Poll;
 
 @Component
 public class PollManager {
 
-    Map<Integer, Poll> polls = new HashMap<>();
-    Map<Integer, User> users = new HashMap<>();
-    Map<Integer, Vote> votes = new HashMap<>();
-    int nextPollId = 0;
-    int nextUserId = 0;
-    int nextVoteId = 0;
+    Map<Long, Poll> polls = new HashMap<>();
+    Map<Long, User> users = new HashMap<>();
+    Map<Long, Vote> votes = new HashMap<>();
+    Long nextPollId = 0L;
+    Long nextUserId = 0L;
+    Long nextVoteId = 0L;
 
     public PollManager (){}
 
@@ -23,7 +21,7 @@ public class PollManager {
     public void addPoll(Poll poll) {
         poll.setId(nextPollId);
         polls.put(nextPollId++, poll);
-        poll.setOwner(users.get(poll.getOwner().getId()));
+        poll.setCreatedBy(users.get(poll.getCreatedBy().getId()));
     }
     public void addUser(User user) {
         user.setId(nextUserId);
@@ -35,11 +33,11 @@ public class PollManager {
     }
 
     // Get
-    public Poll getPoll(int id) {
+    public Poll getPoll(long id) {
         return polls.get(id);
     }
-    public User getUser(int id) { return users.get(id); }
-    public Vote getVote(int id) { return votes.get(id); }
+    public User getUser(long id) { return users.get(id); }
+    public Vote getVote(long id) { return votes.get(id); }
 
     // Get all
     public Collection<Poll> getPolls() {return polls.values();}
@@ -47,7 +45,7 @@ public class PollManager {
     public Collection<Vote> getVotes() {return votes.values();}
 
     // Remove
-    public void removePoll (int pollId) {
+    public void removePoll (long pollId) {
         Poll pollToDelete = polls.get(pollId);
         if(pollToDelete != null){
             votes.values().removeIf(vote -> vote.getPoll().getId() == pollId);
