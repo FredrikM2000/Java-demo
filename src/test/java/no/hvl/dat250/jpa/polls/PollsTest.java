@@ -52,7 +52,7 @@
                  .managedClass(User.class)
                  .managedClass(Vote.class)
                  .managedClass(VoteOption.class)
-                 .property(PersistenceConfiguration.JDBC_URL, "jdbc:h2:mem:polls;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE")
+                 .property(PersistenceConfiguration.JDBC_URL, "jdbc:h2:mem:polls")
                  .property(PersistenceConfiguration.SCHEMAGEN_DATABASE_ACTION, "drop-and-create")
                  .property(PersistenceConfiguration.JDBC_USER, "sa")
                  .property(PersistenceConfiguration.JDBC_PASSWORD, "")
@@ -79,8 +79,8 @@
          emf.runInTransaction(em -> {
              Long vimVotes = em.createQuery("select count(v) from Vote v join v.votesOn as o join o.poll as p join p.createdBy u where u.email = :mail and o.presentationOrder = :order", Long.class).setParameter("mail", "alice@online.com").setParameter("order", 0).getSingleResult();
              Long emacsVotes = em.createQuery("select count(v) from Vote v join v.votesOn as o join o.poll as p join p.createdBy u where u.email = :mail and o.presentationOrder = :order", Long.class).setParameter("mail", "alice@online.com").setParameter("order", 1).getSingleResult();
-//             assertEquals(2, vimVotes);
-//             assertEquals(1, emacsVotes);
+             assertEquals(2, vimVotes);
+             assertEquals(1, emacsVotes);
          });
      }
 
@@ -90,6 +90,31 @@
              List<String> poll2Options = em.createQuery("select o.caption from Poll p join p.options o join p.createdBy u where u.email = :mail order by o.presentationOrder", String.class).setParameter("mail", "eve@mail.org").getResultList();
              List<String> expected = Arrays.asList("Yes! Yammy!", "Mamma mia: Nooooo!");
              assertEquals(expected, poll2Options);
+         });
+     }
+
+     @Test
+     public void debugDatabase() {
+         emf.runInTransaction(em -> {
+             System.out.println("=== USERS ===");
+             em.createNativeQuery("SELECT * FROM users")
+                     .getResultList()
+                     .forEach(row -> System.out.println(Arrays.toString((Object[]) row)));
+
+             System.out.println("=== POLLS ===");
+             em.createNativeQuery("SELECT * FROM polls")
+                     .getResultList()
+                     .forEach(row -> System.out.println(Arrays.toString((Object[]) row)));
+
+             System.out.println("=== VOTEOPTIONS ===");
+             em.createNativeQuery("SELECT * FROM voteoptions")
+                     .getResultList()
+                     .forEach(row -> System.out.println(Arrays.toString((Object[]) row)));
+
+             System.out.println("=== VOTES ===");
+             em.createNativeQuery("SELECT * FROM votes")
+                     .getResultList()
+                     .forEach(row -> System.out.println(Arrays.toString((Object[]) row)));
          });
      }
  }

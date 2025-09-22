@@ -37,8 +37,6 @@ public class User {
         vote.setVotesOn(voteOption);
         vote.setPoll(voteOption.getPoll());
         vote.voter = this;
-        voteOption.setVotesCount(voteOption.getVotesCount() + 1);
-        voteOption.getVotes().add(vote);
         return vote;
     }
 

@@ -23,7 +23,7 @@ public class VoteOption {
 
     String caption;
     int presentationOrder;
-    int votesCount;
+    int votesCount = 0;
 
     public VoteOption() { }
 

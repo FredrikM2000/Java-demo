@@ -37,7 +37,7 @@ public class Poll {
         VoteOption voteOption = new VoteOption();
         voteOption.setCaption(option);
         voteOption.setPoll(this);
-        voteOption.presentationOrder++;
+        voteOption.setPresentationOrder(options.size());
         options.add(voteOption);
 
         return voteOption;
